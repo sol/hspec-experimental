@@ -9,12 +9,14 @@ build-type:       Simple
 cabal-version:    >= 1.8
 category:         Testing
 stability:        experimental
-synopsis:         An experimental DSL on top of Hspec
-description:      An experimental DSL on top of Hspec
+synopsis:         An experimental DSL for testing on top of Hspec
+description:      /Note:/ This is experimental!  If you are looking for a
+                  stable solution for testing Haskell code, try Hspec:
+                  <http://hspec.github.com/>
 
 source-repository head
   type: git
-  location: https://github.com/hspec/hspec-experimental
+  location: https://github.com/sol/hspec-experimental
 
 library
   ghc-options:      -Wall

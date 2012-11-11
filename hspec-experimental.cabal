@@ -22,7 +22,7 @@ library
   exposed-modules:  Test.Hspec.Experimental
   build-depends:
       base        == 4.*
-    , hspec       >= 1.4.2
+    , hspec       == 1.4.*
     , QuickCheck  >= 2.5
     , HUnit
 

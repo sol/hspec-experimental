@@ -1,1 +1,7 @@
 language: haskell
+
+before_install:
+  # Install first, so that hspec-meta depends on the same version of
+  # QuickCheck.
+  - cabal install
+  - git clone https://github.com/hspec/hspec -b hspec-meta --depth=1 && cd hspec && cabal install && cd .. && rm -rf hspec

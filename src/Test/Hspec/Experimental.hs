@@ -3,9 +3,12 @@
 module Test.Hspec.Experimental (
   module Test.Hspec
 , it
+, pending
 ) where
 
-import           Test.Hspec hiding (it)
+import           Data.List (isInfixOf)
+
+import           Test.Hspec hiding (it, pending)
 import           Test.Hspec.Core (Params(..), Result(..), SpecTree(..), fromSpecList)
 
 import qualified Control.Exception as E
@@ -13,6 +16,13 @@ import           Test.HUnit.Lang (HUnitFailure(..))
 
 import qualified Test.QuickCheck.Property as QCP
 import qualified Test.QuickCheck as QC
+
+-- We use 128 bit *true* randomness as a marker.
+pendingMarker :: String
+pendingMarker = "PENDING 977aedc89d766ce47705f06675f60d61"
+
+pending :: QCP.Result
+pending = QCP.failed {QCP.reason = pendingMarker}
 
 runExpectation :: Expectation -> QC.Property
 runExpectation action = QCP.morallyDubiousIOProperty $ do
@@ -34,7 +44,7 @@ it s p = fromSpecList [SpecItem s result]
       return $
         case r of
           QC.Success {}               -> Success
-          f@(QC.Failure {})           -> Fail (QC.output f)
+          QC.Failure {QC.output = e}  -> if pendingMarker `isInfixOf` e then Pending Nothing else Fail e
           QC.GaveUp {QC.numTests = n} -> Fail ("Gave up after " ++ quantify n "test" )
           QC.NoExpectedFailure {}     -> Fail ("No expected failure")
 

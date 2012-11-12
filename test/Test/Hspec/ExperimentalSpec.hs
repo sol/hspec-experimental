@@ -2,6 +2,8 @@ module Test.Hspec.ExperimentalSpec (main, spec) where
 
 import           Test.Hspec.Meta
 import qualified Test.Hspec.Experimental as H
+import qualified Test.Hspec.Runner as H
+import           System.IO.Silently
 import           Data.IORef
 
 main :: IO ()
@@ -24,3 +26,12 @@ spec = do
               (reverse . reverse) xs `shouldBe` (xs :: [Int])
       H.hspec testSpec
       readIORef ref `shouldReturn` 123
+
+  describe "pending" $ do
+    it "specifies a pending example" $ do
+      r <- runSpec $ do
+        H.it "foo" H.pending
+      r `shouldSatisfy` any (== "     # PENDING: No reason given")
+  where
+    runSpec :: H.Spec -> IO [String]
+    runSpec = fmap lines . capture_ . H.hspecWith H.defaultConfig

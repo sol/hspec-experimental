@@ -36,4 +36,6 @@ test-suite spec
   build-depends:
       base
     , hspec-experimental
+    , hspec
     , hspec-meta
+    , silently
